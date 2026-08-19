@@ -11,6 +11,7 @@
  * @file Component.php
  * @brief Base component implementation.
  */
+
 namespace AndreaPeverelli\PhxCore;
 
 use Mustache\Engine;
@@ -40,24 +41,27 @@ abstract class Component
 	public string $html = "";
 
 	/**
-	 * Registers props for a component in the internal state.
+	 * Setup the component registering the props and the mustache template; than returns the props.
 	 *
-	 * @param object $props
-	 * @param null|string $component_id
+	 * @param object|array<string, object> $props
+	 * @param string $template
+	 *
+	 * @return array<string, object>
 	 */
-	final protected function registerProps(object $props, ?string $component_id = null): void
+	final protected function setup(object|array $props, string $template): array
 	{
-		$this->props[$component_id ?? "default"] = $props;
-	}
+		if(is_object($props)) {
+			$this->props["default"] = $props;
+			$props = ["default" => $props];
+		} else {
+			foreach($props as $component_id => $component_props) {
+				$this->props[$component_id] = $component_props;
+			}
+		}
 
-	/**
-	 * Get a component props from the internal state.
-	 *
-	 * @param null|string $component_id
-	 */
-	final protected function getProps(?string $component_id = null): object
-	{
-		return $this->props[$component_id ?? "default"];
+		$this->template = $template;
+
+		return $props;
 	}
 
 	/**
