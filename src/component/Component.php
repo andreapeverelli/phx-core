@@ -37,6 +37,10 @@ abstract class Component
 	 */
 	public array $attributes = ["default" => []];
 	public object $context;
+	/**
+	 * The component mustache template
+	 */
+	public string $template = "";
 
 	public string $html = "";
 
