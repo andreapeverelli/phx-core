@@ -1,0 +1,25 @@
+{
+    "name": "andreapeverelli/phx-core",
+    "description": "A frontend hypermedia framework for PHP.",
+    "type": "framework",
+    "license": "GPL-3.0",
+	"version": "0.1.0",
+    "autoload": {
+        "psr-4": {
+            "AndreaPeverelli\\PhxCore\\": [
+				"src/",
+				"src/component/"
+			]
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrea Peverelli",
+			"email": "ndrpeverelli@gmail.com"
+        }
+    ],
+	"minimum-stability": "stable",
+    "require": {
+        "mustache/mustache": "^3.2"
+    }
+}
