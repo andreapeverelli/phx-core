@@ -1,0 +1,22 @@
+<?php
+
+/*
+ * Copyright (c) 2026 Andrea Peverelli
+ * https://github.com/andreapeverelli/phx-core.git
+ *
+ * SPDX-License-Identifier: GPL-3.0-only
+ */
+
+/**
+ * @file TypoSubRole.php
+ * @brief Material You typography subroles.
+ */
+
+namespace AndreaPeverelli\PhxCore\Typography;
+
+enum TypoSubRole: string
+{
+    case LARGE = "large";
+    case MEDIUM = "medium";
+    case SMALL = "small";
+}

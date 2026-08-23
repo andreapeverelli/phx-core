@@ -3,6 +3,49 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog,
 and this project adheres to Semantic Versioning.
 
+## [0.2.0] 2026-08-24
+
+### Added
+ - Gamut 
+ - Theme
+ - Contrast
+ - Color
+ - BaseColor
+ - ColorRole
+ - Tone
+ - Typo
+ - TypoRole
+ - TypoSubRole
+ - Emphasized
+ - Settings
+ - CssPropreties
+ - Default palette and typescale settings
+ - phpunit
+ - phpdocumentor
+ - code coverage
+ - php-cs-fixer
+ - php-stan
+ - Logging PSR+Monolog
+
+### Updated
+ - Component
+ - ComponentTest
+
+## [0.1.3] 2026-08-19
+
+### Added
+ - Component test.
+
+## [0.1.2] 2026-08-19
+
+### Updated
+ - Component
+
+## [0.1.1] 2026-08-19
+
+### Updated
+ - Component
+
 ## [0.1.0] 2026-08-19
 
 ### Added

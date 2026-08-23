@@ -1,0 +1,151 @@
+{
+    "display": {
+        "large": {
+            "font-size": 57,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 64,
+            "letter-spacing": 0
+        },
+        "medium": {
+            "font-size": 45,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 52,
+            "letter-spacing": 0
+        },
+        "small": {
+            "font-size": 36,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 44,
+            "letter-spacing": 0
+        }
+    },
+    "headline": {
+        "large": {
+            "font-size": 32,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 39.99999999999999,
+            "letter-spacing": 0
+        },
+        "medium": {
+            "font-size": 28,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 36,
+            "letter-spacing": 0
+        },
+        "small": {
+            "font-size": 24,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 32,
+            "letter-spacing": 0
+        }
+    },
+    "title": {
+        "large": {
+            "font-size": 22,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 28.000000000000004,
+            "letter-spacing": 0
+        },
+        "medium": {
+            "font-size": 16,
+            "font-weight": {
+                "regular": 500,
+                "emphasized": 700
+            },
+            "line-height": 25.7071129707113,
+            "letter-spacing": 0
+        },
+        "small": {
+            "font-size": 14,
+            "font-weight": {
+                "regular": 500,
+                "emphasized": 700
+            },
+            "line-height": 21.422594142259417,
+            "letter-spacing": 0
+        }
+    },
+    "main-font-name": "",
+    "main-italic": "",
+    "body": {
+        "large": {
+            "font-size": 16,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 25.241548645937815,
+            "letter-spacing": 0
+        },
+        "medium": {
+            "font-size": 14,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 21.034623871614844,
+            "letter-spacing": 0
+        },
+        "small": {
+            "font-size": 12,
+            "font-weight": {
+                "regular": 400,
+                "emphasized": 500
+            },
+            "line-height": 16.827699097291877,
+            "letter-spacing": 0.1016924122160174
+        }
+    },
+    "label": {
+        "large": {
+            "font-size": 14,
+            "font-weight": {
+                "regular": 500,
+                "emphasized": 700
+            },
+            "line-height": 21.034623871614844,
+            "letter-spacing": 0
+        },
+        "medium": {
+            "font-size": 12,
+            "font-weight": {
+                "regular": 500,
+                "emphasized": 700
+            },
+            "line-height": 16.827699097291877,
+            "letter-spacing": 0.10575807248081927
+        },
+        "small": {
+            "font-size": 11,
+            "font-weight": {
+                "regular": 500,
+                "emphasized": 700
+            },
+            "line-height": 16.827699097291877,
+            "letter-spacing": 0.10575807248081927
+        }
+    },
+    "support-font-name": "",
+    "support-italic": ""
+}
