@@ -28,13 +28,12 @@ use AndreaPeverelli\PhxCore\Settings\Setting;
 use PHPUnit\Runner\FileDoesNotExistException;
 
 /**
- * @phpstan-type PropsObject \stdClass&object{
- *		attributes: array{
- *			id?: string,
- *			class?: array<int, string>,
- *			...<string, string>
- *		}
+ * @phpstan-type RawAttributes array{
+ *		id?: string,
+ *		class?: array<int, string>,
+ *		...<string, string>
  * }
+ * @phpstan-type PropsObject \stdClass&object{attributes: RawAttributes}
  * @phpstan-type Props array<string, PropsObject>
  *
  * @phpstan-type Attribute array<int, array{key: string, value: string}>
