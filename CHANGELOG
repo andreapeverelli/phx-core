@@ -5,7 +5,8 @@ and this project adheres to Semantic Versioning.
 
 ## [0.2.3] 2026-08-2
 
-###
+### Updated
+ - Destructurized PropsObjects => now there's RawAttribute type
 
 ## [0.2.2] 2026-08-24
 
