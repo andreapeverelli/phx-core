@@ -30,6 +30,13 @@ use AndreaPeverelli\PhxCore\Css\CssProperty;
 use AndreaPeverelli\PhxCore\Typography\Typo;
 use AndreaPeverelli\PhxCore\Typography\TypoRole;
 use AndreaPeverelli\PhxCore\Typography\TypoSubRole;
+use PHPUnit\Runner\FileDoesNotExistException;
+
+/**
+ * @phpstan-import-type PropsObject from \AndreaPeverelli\PhxCore\Component
+ * @phpstan-import-type Props from \AndreaPeverelli\PhxCore\Component
+ * @phpstan-import-type Attribute from \AndreaPeverelli\PhxCore\Component
+ */
 
 final class ComponentTest extends TestCase
 {
@@ -46,32 +53,20 @@ final class ComponentTest extends TestCase
         $component = new TestComponent();
         $props = $component->setupComponent(
             props: (object) ["attributes" => ["id" => $id]],
-            template: "Test Setup",
             app: new App(
                 logger: $logger,
                 settings: [],
             ),
         );
 
-        $this->assertTrue($handler->hasInfo("Setting up"));
-        $this->assertTrue($handler->hasDebug("Setting up state"));
+        $this->assertTrue($handler->hasInfo("Setting up test-component"));
+        $this->assertTrue($handler->hasDebug("Setting up state of test-component"));
 
         $this->assertEquals(
             ["default" => (object) ["attributes" => ["id" => $id]]],
             $props,
             "Checking props",
         );
-    }
-
-    #[Test]
-    #[TestDox("Setting up a component with multiple props")]
-    public function setupMultiPropsComponent(): void
-    {
-        $logger = new Logger("test");
-        $handler = new TestHandler();
-        $logger->pushHandler($handler);
-
-        $id = uniqid();
 
         $component = new TestComponent();
         $props = $component->setupComponent(
@@ -79,7 +74,6 @@ final class ComponentTest extends TestCase
                 "default" => (object) ["attributes" => ["id" => $id]],
                 "test" => (object) ["attributes" => ["id" => $id]],
             ],
-            template: "Test Setup",
             app: new App(
                 logger: $logger,
                 settings: [],
@@ -87,8 +81,8 @@ final class ComponentTest extends TestCase
         );
 
 
-        $this->assertTrue($handler->hasInfo("Setting up"));
-        $this->assertTrue($handler->hasDebug("Setting up state"));
+        $this->assertTrue($handler->hasInfo("Setting up test-component"));
+        $this->assertTrue($handler->hasDebug("Setting up state of test-component"));
 
         $this->assertEquals(
             [
@@ -98,6 +92,7 @@ final class ComponentTest extends TestCase
             $props,
             "Checking props",
         );
+
     }
 
     #[Test]
@@ -107,6 +102,7 @@ final class ComponentTest extends TestCase
         $logger = new Logger("test");
         $handler = new TestHandler();
         $logger->pushHandler($handler);
+
         $id = uniqid();
 
         $component = new TestComponent();
@@ -116,7 +112,6 @@ final class ComponentTest extends TestCase
                 "class" => ["test1", "test2"],
                 "test-key" => "test-value",
             ]],
-            template: "Test Get Attributes",
             app: new App(
                 logger: $logger,
                 settings: [],
@@ -125,7 +120,7 @@ final class ComponentTest extends TestCase
 
         $attributes = $component->getComponentAttributes();
 
-        $this->assertTrue($handler->hasInfo("Getting attributes"));
+        $this->assertTrue($handler->hasInfo("Getting attributes of test-component"));
 
         $this->assertSame(
             [
@@ -140,7 +135,6 @@ final class ComponentTest extends TestCase
         $component = new TestComponent();
         $component->setupComponent(
             props: (object) ["attributes" => []],
-            template: "Test Get Attributes",
             app: new App(
                 logger: $logger,
                 settings: [],
@@ -149,7 +143,7 @@ final class ComponentTest extends TestCase
 
         $attributes = $component->getComponentAttributes();
 
-        $this->assertTrue($handler->hasInfo("Getting attributes"));
+        $this->assertTrue($handler->hasInfo("Getting attributes of test-component"));
 
         $this->assertTrue(
             $attributes[0]["key"] === "id" && is_string($attributes[0]["value"]),
@@ -164,12 +158,33 @@ final class ComponentTest extends TestCase
         $logger = new Logger("test");
         $handler = new TestHandler();
         $logger->pushHandler($handler);
+
         $id = uniqid();
 
+        // No template
         $component = new TestComponent();
         $component->setupComponent(
             props: (object) [],
-            template: "Test Build id={{attributes.id}}",
+            app: new App(
+                logger: $logger,
+                settings: [],
+            ),
+        );
+
+        $component->buildComponent();
+
+        $this->assertTrue($handler->hasInfo("Building component test-component"));
+
+        $this->assertEquals(
+            "",
+            $component->html,
+            "Checking build",
+        );
+
+        // Valid template
+        $component = new TestComponentTemplate();
+        $component->setupComponent(
+            props: (object) [],
             app: new App(
                 logger: $logger,
                 settings: [],
@@ -179,13 +194,26 @@ final class ComponentTest extends TestCase
         $component->setComponentContext(context: (object) ["attributes" => ["id" => $id]]);
         $component->buildComponent();
 
-        $this->assertTrue($handler->hasInfo("Building component"));
+        $this->assertTrue($handler->hasInfo("Building component test-component"));
 
         $this->assertEquals(
-            "Test Build id=$id",
+            "Test Build id=$id\n",
             $component->html,
             "Checking build",
         );
+
+        // Broken template
+        $component = new TestComponentBrokenTemplate();
+        $component->setupComponent(
+            props: (object) [],
+            app: new App(
+                logger: $logger,
+                settings: [],
+            ),
+        );
+
+        $this->expectException(exception: FileDoesNotExistException::class);
+        $component->buildComponent();
     }
 
     #[Test]
@@ -200,7 +228,6 @@ final class ComponentTest extends TestCase
             $component = new TestComponent();
             $component->setupComponent(
                 props: [],
-                template: "Test Color",
                 app: new App(
                     logger: $logger,
                     settings: [
@@ -219,9 +246,7 @@ final class ComponentTest extends TestCase
 
             $attributes = $component->getComponentAttributes();
 
-            $component->buildComponent();
-
-            $this->assertTrue($handler->hasInfo("Adding color"));
+            $this->assertTrue($handler->hasInfo("Adding color to test-component"));
 
             if ($color_role === ColorRole::ON_ROLE) {
                 $this->assertSame(
@@ -276,7 +301,6 @@ final class ComponentTest extends TestCase
         $component = new TestComponent();
         $component->setupComponent(
             props: [],
-            template: "Test Font",
             app: new App(
                 logger: $logger,
                 settings: [
@@ -295,9 +319,7 @@ final class ComponentTest extends TestCase
 
         $attributes = $component->getComponentAttributes();
 
-        $component->buildComponent();
-
-        $this->assertTrue($handler->hasInfo("Adding typo"));
+        $this->assertTrue($handler->hasInfo("Adding typo to test-component"));
         $this->assertSame(
             [<<<CSS
 			.display-large {
@@ -329,22 +351,33 @@ final class ComponentTest extends TestCase
 
 }
 
-/**
- * @phpstan-import-type PropsObject from \AndreaPeverelli\PhxCore\Component
- * @phpstan-import-type Props from \AndreaPeverelli\PhxCore\Component
- * @phpstan-import-type Attribute from \AndreaPeverelli\PhxCore\Component
- */
 final class TestComponent extends Component
 {
+    final protected static function getName(): string
+    {
+        return "test-component";
+    }
+
+    final protected static function getTemplatePath(): string
+    {
+        return "";
+    }
+
     /**
      * @param PropsObject|Props $props
      *
      * @return Props
      */
-    public function setupComponent(object|array $props, string $template, App $app): array
+    public function setupComponent(object|array $props, App $app): array
     {
-        return $this->setup(props: $props, template: $template, app: $app);
+        return $this->setup(props: $props, app: $app);
     }
+
+    final public function setComponentContext(object $context): void
+    {
+        $this->context = $context;
+    }
+
     /**
      * @return Attribute
      */
@@ -356,11 +389,6 @@ final class TestComponent extends Component
     public function buildComponent(): void
     {
         $this->build();
-    }
-
-    public function setComponentContext(object $context): void
-    {
-        $this->setContext(context: $context);
     }
 
     public function addComponentColor(
@@ -385,5 +413,71 @@ final class TestComponent extends Component
             content: $content,
             component_id: $component_id,
         );
+    }
+}
+
+final class TestComponentTemplate extends Component
+{
+    final protected static function getName(): string
+    {
+        return "test-component";
+    }
+
+    final protected static function getTemplatePath(): string
+    {
+        return __DIR__ . "/build.component.test.mustache";
+    }
+
+    /**
+     * @param PropsObject|Props $props
+     *
+     * @return Props
+     */
+    public function setupComponent(object|array $props, App $app): array
+    {
+        return $this->setup(props: $props, app: $app);
+    }
+
+    public function buildComponent(): void
+    {
+        $this->build();
+    }
+
+    public function setComponentContext(object $context): void
+    {
+        $this->context = $context;
+    }
+}
+
+final class TestComponentBrokenTemplate extends Component
+{
+    final protected static function getName(): string
+    {
+        return "test-component";
+    }
+
+    final protected static function getTemplatePath(): string
+    {
+        return __DIR__ . "/path.doesnt.exists.test.mustache";
+    }
+
+    /**
+     * @param PropsObject|Props $props
+     *
+     * @return Props
+     */
+    public function setupComponent(object|array $props, App $app): array
+    {
+        return $this->setup(props: $props, app: $app);
+    }
+
+    public function buildComponent(): void
+    {
+        $this->build();
+    }
+
+    public function setComponentContext(object $context): void
+    {
+        $this->context = $context;
     }
 }

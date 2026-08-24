@@ -16,12 +16,12 @@ declare(strict_types=1);
 
 namespace AndreaPeverelli\PhxCore\Typography;
 
-final class Typo
+final readonly class Typo
 {
     public function __construct(
-        public TypoRole $role,
-        public TypoSubRole $sub_role,
-        public Emphasized $emphasized = Emphasized::REGULAR,
+        public private(set) TypoRole $role,
+        public private(set) TypoSubRole $sub_role,
+        public private(set) Emphasized $emphasized = Emphasized::REGULAR,
     ) {}
 
     public function __toString(): string

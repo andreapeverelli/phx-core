@@ -50,11 +50,11 @@ use Psr\Log\LoggerInterface;
  *		typescale: TypescaleSettings,
  * }
  */
-final class App
+final readonly class App
 {
     public function __construct(
         /** @var Settings */
-        public array $settings,
-        public LoggerInterface $logger,
+        public private(set) array $settings,
+        public private(set) LoggerInterface $logger,
     ) {}
 }

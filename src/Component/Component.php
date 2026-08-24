@@ -25,6 +25,7 @@ use AndreaPeverelli\PhxCore\Palette\Gamut;
 use AndreaPeverelli\PhxCore\Typography\Typo;
 use AndreaPeverelli\PhxCore\Css\CssProperty;
 use AndreaPeverelli\PhxCore\Settings\Setting;
+use PHPUnit\Runner\FileDoesNotExistException;
 
 /**
  * @phpstan-type PropsObject \stdClass&object{
@@ -37,6 +38,7 @@ use AndreaPeverelli\PhxCore\Settings\Setting;
  * @phpstan-type Props array<string, PropsObject>
  *
  * @phpstan-type Attribute array<int, array{key: string, value: string}>
+ * @phpstan-type Attributes array<string, Attribute>
  *
  * @phpstan-import-type Settings from \AndreaPeverelli\PhxCore\App
  */
@@ -52,19 +54,22 @@ abstract class Component
      *
      * @var Props
      */
-    private array $props = [];
+    private array $props;
 
     /**
      * Normalized HTML attributes indexed by component_id
      *
-     * @var array<string, Attribute>
+     * @var Attributes
      */
-    private array $attributes = [];
-    private object $context;
+    private array $attributes;
+    protected object $context;
+
+    abstract protected static function getName(): string;
+
     /**
-     * The component mustache template
+     * The component mustache template file path; return "" for no template
      */
-    private string $template = "";
+    abstract protected static function getTemplatePath(): string;
 
     /**
      * PHX app data like settings and logger instance
@@ -77,13 +82,13 @@ abstract class Component
      * Build bundle                                   *
      **************************************************/
 
-    public string $html = "";
+    public private(set) string $html = "";
     /** @var array<int, string> $css */
-    public array $css = [];
+    public private(set) array $css = [];
     /** @var array<int, string> $js */
-    public array $js = [];
+    public private(set) array $js = [];
     /** @var array<int, array{font-family: string, italic: bool}> $fonts */
-    public array $fonts = [];
+    public private(set) array $fonts = [];
 
     /**************************************************
      * Internal state management processes            *
@@ -93,18 +98,14 @@ abstract class Component
      * Setup the component registering the props and the mustache template; than returns the props.
      *
      * @param PropsObject|Props $props
-     * @param string $template
      * @param App $app
      *
      * @return Props
      */
-    final protected function setup(object|array $props, string $template, App &$app): array
+    final protected function setup(object|array $props, App &$app): array
     {
-        $app->logger->info("Setting up");
-        $app->logger->debug("Setting up state", [
-            "props" => var_export($props, true),
-            "template" => $template,
-        ]);
+        $app->logger->info("Setting up " . $this->getName());
+        $app->logger->debug("Setting up state of " . $this->getName(), ["props" => var_export($props, true)]);
 
         if (is_object($props)) {
             $this->props["default"] = $props;
@@ -115,7 +116,6 @@ abstract class Component
             }
         }
 
-        $this->template = $template;
         $this->app = $app;
 
         return $props;
@@ -130,7 +130,7 @@ abstract class Component
      */
     final protected function getAttributes(string $component_id = "default"): array
     {
-        $this->app->logger->info("Getting attributes", ["component_id" => $component_id]);
+        $this->app->logger->info("Getting attributes of " . $this->getName(), ["component_id" => $component_id]);
 
         $this->buildAttributes(component_id: $component_id);
 
@@ -144,7 +144,7 @@ abstract class Component
      */
     private function buildAttributes(string $component_id): void
     {
-        $this->app->logger->info("Building attributes", ["component_id" => $component_id]);
+        $this->app->logger->info("Building attributes of " . $this->getName(), ["component_id" => $component_id]);
 
         $is_id_set = false;
         $this->attributes[$component_id] = [];
@@ -181,18 +181,6 @@ abstract class Component
     }
 
     /**
-     * Context setter
-     *
-     * @param object $context
-     */
-    final protected function setContext(object $context): void
-    {
-        $this->app->logger->info("Setting context");
-
-        $this->context = $context;
-    }
-
-    /**
      * Generate and register color related CSS and classnames.
      *
      * @param Color $color
@@ -201,7 +189,7 @@ abstract class Component
      */
     final protected function addColor(Color $color, CssProperty $css_property, string $component_id = "default"): void
     {
-        $this->app->logger->info("Adding color", [
+        $this->app->logger->info("Adding color to " . $this->getName(), [
             "color" => (string) $color,
             "css_property" => $css_property->value,
             "component_id" => $component_id,
@@ -296,7 +284,7 @@ abstract class Component
         string $content,
         string $component_id = "default",
     ): void {
-        $this->app->logger->info("Adding typo", [
+        $this->app->logger->info("Adding typo to " . $this->getName(), [
             "typo" => (string) $typo,
             "component_id" => $component_id,
         ]);
@@ -337,7 +325,7 @@ abstract class Component
      */
     final protected function registerClass(string $class, string $component_id = "default"): void
     {
-        $this->app->logger->info("Registering class", [
+        $this->app->logger->info("Registering class to " . $this->getName(), [
             "class" => $class,
             "component_id" => $component_id,
         ]);
@@ -357,7 +345,7 @@ abstract class Component
      */
     final protected function build(): void
     {
-        $this->app->logger->info("Building component");
+        $this->app->logger->info("Building component " . $this->getName());
 
         $this->render();
     }
@@ -367,11 +355,22 @@ abstract class Component
      */
     private function render(): void
     {
-        $this->app->logger->info("Rendering mustache template");
+        $this->app->logger->info("Rendering mustache template of " . $this->getName());
+
+        $template_path = static::getTemplatePath();
+        if ($template_path === "") {
+            $template = "";
+        } else {
+            $template = @file_get_contents(static::getTemplatePath());
+        }
+
+        if ($template === false) {
+            throw new FileDoesNotExistException($this->getName() . ": mustache template file doesn't exists at " . static::getTemplatePath());
+        }
 
         $mustache = new Engine(["entity_flags" => ENT_QUOTES]);
 
         $this->context ??= (object) [];
-        $this->html = $mustache->render($this->template, $this->context);
+        $this->html = $mustache->render($template, $this->context);
     }
 }

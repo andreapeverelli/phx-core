@@ -16,11 +16,11 @@ declare(strict_types=1);
 
 namespace AndreaPeverelli\PhxCore\Palette;
 
-final class Color
+final readonly class Color
 {
     public function __construct(
-        public BaseColor $base,
-        public ColorRole $role,
+        public private(set) BaseColor $base,
+        public private(set) ColorRole $role,
     ) {}
 
     public function __toString(): string
