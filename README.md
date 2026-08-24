@@ -15,3 +15,25 @@ A frontend hypermedia framework for PHP.
 ```bash
 composer require andreapeverelli/phx-core
 ```
+
+### Usefull commands
+#### Do all testings/buildings
+```bash
+composer prepare
+```
+#### Run tests + Get test coverage
+```bash
+composer test
+```
+#### Code analysis
+```bash
+composer analyse
+```
+#### Linting analysis
+```bash
+composer lint
+```
+#### Linting fix
+```bash
+composer fix
+```
