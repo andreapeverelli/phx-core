@@ -12,6 +12,8 @@
  * @brief CSS properties list.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Css;
 
 enum CssProperty: string

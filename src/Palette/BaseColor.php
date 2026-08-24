@@ -12,6 +12,8 @@
  * @brief Available base color palettes.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Palette;
 
 enum BaseColor: string

@@ -12,6 +12,8 @@
  * @brief Available PHX settings.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Settings;
 
 enum Setting: string

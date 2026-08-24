@@ -12,6 +12,8 @@
  * @brief Available gamuts.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Palette;
 
 enum Gamut: string

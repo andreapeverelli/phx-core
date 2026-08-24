@@ -12,6 +12,8 @@
  * @brief App class containing all application utilities like PHX settings and the logger instance
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore;
 
 use Psr\Log\LoggerInterface;

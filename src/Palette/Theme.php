@@ -12,6 +12,8 @@
  * @brief Available themes.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Palette;
 
 enum Theme: string

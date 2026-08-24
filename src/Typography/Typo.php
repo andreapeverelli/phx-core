@@ -12,6 +12,8 @@
  * @brief PHX typography class.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Typography;
 
 final class Typo

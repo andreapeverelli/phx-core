@@ -12,6 +12,8 @@
  * @brief Base component implementation; it manages mustache templates rendering, PHX building and properties normalization.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore;
 
 use Mustache\Engine;

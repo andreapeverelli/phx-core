@@ -12,6 +12,8 @@
  * @brief Material You typography subroles.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Typography;
 
 enum TypoSubRole: string

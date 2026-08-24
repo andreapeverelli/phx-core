@@ -12,6 +12,8 @@
  * @brief Material You color roles.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Palette;
 
 /**

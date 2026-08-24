@@ -12,6 +12,8 @@
  * @brief Typography emphasized states.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Typography;
 
 enum Emphasized: string

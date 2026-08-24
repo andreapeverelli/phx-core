@@ -12,6 +12,8 @@
  * @brief Available contrasts.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Palette;
 
 enum Contrast: string

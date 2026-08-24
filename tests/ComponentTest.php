@@ -12,6 +12,8 @@
  * @brief Base component unit test.
  */
 
+declare(strict_types=1);
+
 namespace Tests;
 
 use PHPUnit\Framework\TestCase;
