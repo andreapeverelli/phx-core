@@ -12,6 +12,8 @@
  * @brief Material You typography roles with font-face.
  */
 
+declare(strict_types=1);
+
 namespace AndreaPeverelli\PhxCore\Typography;
 
 enum TypoRole: string
