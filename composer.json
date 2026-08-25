@@ -3,7 +3,7 @@
     "description": "A frontend hypermedia framework for PHP.",
     "type": "framework",
     "license": "GPL-3.0",
-	"version": "0.2.3",
+	"version": "0.2.4",
     "autoload": {
         "psr-4": {
             "AndreaPeverelli\\PhxCore\\": [

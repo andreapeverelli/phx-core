@@ -28,20 +28,14 @@ use AndreaPeverelli\PhxCore\Settings\Setting;
 use PHPUnit\Runner\FileDoesNotExistException;
 
 /**
- * @phpstan-type RawAttributes array{
- *		id?: string,
- *		class?: array<int, string>,
- *		...<string, string>
- * }
- * @phpstan-type PropsObject \stdClass&object{attributes: RawAttributes}
- * @phpstan-type Props array<string, PropsObject>
+ * @template PropsObject of Props
+ * @phpstan-type ComponentsProps array<string, PropsObject>
  *
- * @phpstan-type Attribute array<int, array{key: string, value: string}>
- * @phpstan-type Attributes array<string, Attribute>
+ * @phpstan-type NormalizedAttributes array<int, array{key: string, value: string}>
+ * @phpstan-type ComponentsAttributes array<string, NormalizedAttributes>
  *
  * @phpstan-import-type Settings from \AndreaPeverelli\PhxCore\App
  */
-
 abstract class Component
 {
     /**************************************************
@@ -51,14 +45,14 @@ abstract class Component
     /**
      * Registered props indexed by component_id
      *
-     * @var Props
+     * @var ComponentsProps
      */
     private array $props;
 
     /**
      * Normalized HTML attributes indexed by component_id
      *
-     * @var Attributes
+     * @var ComponentsAttributes
      */
     private array $attributes;
     protected object $context;
@@ -96,10 +90,10 @@ abstract class Component
     /**
      * Setup the component registering the props and the mustache template; than returns the props.
      *
-     * @param PropsObject|Props $props
+     * @param PropsObject|ComponentsProps $props
      * @param App $app
      *
-     * @return Props
+     * @return ComponentsProps
      */
     final protected function setup(object|array $props, App &$app): array
     {
@@ -125,7 +119,7 @@ abstract class Component
      *
      * @param string $component_id
      *
-     * @return Attribute
+     * @return NormalizedAttributes
      */
     final protected function getAttributes(string $component_id = "default"): array
     {
@@ -329,7 +323,6 @@ abstract class Component
             "component_id" => $component_id,
         ]);
 
-        $this->props[$component_id] ??= (object) ["attributes" => ["class" => []]];
         $this->props[$component_id]->attributes["class"] ??= [];
 
         array_push($this->props[$component_id]->attributes["class"], $class);
