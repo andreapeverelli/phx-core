@@ -3,9 +3,18 @@ All notable changes to this project will be documented in this file.
 The format is based on Keep a Changelog,
 and this project adheres to Semantic Versioning.
 
-## [0.2.4] 2026-08-2
+## [0.2.5] 2026-08-26
 
-###
+### Added
+ - BaseColor neutral and variant
+
+## [0.2.4] 2026-08-26
+
+### Added
+ - Props
+
+### Updated
+ - Component and ComponentTest
 
 ## [0.2.3] 2026-08-24
 

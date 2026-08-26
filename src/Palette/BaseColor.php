@@ -19,6 +19,8 @@ namespace AndreaPeverelli\PhxCore\Palette;
 enum BaseColor: string
 {
     // standard
+    case NEUTRAL = "neutral";
+    case VARIANT = "variant";
     case PRIMARY = "primary";
     case SECONDARY = "secondary";
     case TERTIARY = "tertiary";
