@@ -25,7 +25,7 @@ use AndreaPeverelli\PhxCore\Palette\Gamut;
 use AndreaPeverelli\PhxCore\Typography\Typo;
 use AndreaPeverelli\PhxCore\Css\CssProperty;
 use AndreaPeverelli\PhxCore\Settings\Setting;
-use PHPUnit\Runner\FileDoesNotExistException;
+use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
 
 /**
  * @template PropsObject of Props
@@ -235,30 +235,30 @@ abstract class Component
         $class = "{$color->base->value}-{$color->role->value}-{$css_property}";
 
         $css = <<<CSS
-		.$class {
-			$css_property: "{$color_values[Theme::LIGHT->value][Contrast::DEFAULT->value][Gamut::SRGB->value]}";
-			$css_property: "{$color_values[Theme::LIGHT->value][Contrast::DEFAULT->value][Gamut::DISPLAY_P3->value]}";
-			$css_property: "{$color_values[Theme::LIGHT->value][Contrast::DEFAULT->value][Gamut::REC2020->value]}";
+        .$class {
+            $css_property: "{$color_values[Theme::LIGHT->value][Contrast::DEFAULT->value][Gamut::SRGB->value]}";
+            $css_property: "{$color_values[Theme::LIGHT->value][Contrast::DEFAULT->value][Gamut::DISPLAY_P3->value]}";
+            $css_property: "{$color_values[Theme::LIGHT->value][Contrast::DEFAULT->value][Gamut::REC2020->value]}";
 
-			@media (prefers-contrast: more) {
-				$css_property: "{$color_values[Theme::LIGHT->value][Contrast::HIGH->value][Gamut::SRGB->value]}";
-				$css_property: "{$color_values[Theme::LIGHT->value][Contrast::HIGH->value][Gamut::DISPLAY_P3->value]}";
-				$css_property: "{$color_values[Theme::LIGHT->value][Contrast::HIGH->value][Gamut::REC2020->value]}";
-			}	
+            @media (prefers-contrast: more) {
+                $css_property: "{$color_values[Theme::LIGHT->value][Contrast::HIGH->value][Gamut::SRGB->value]}";
+                $css_property: "{$color_values[Theme::LIGHT->value][Contrast::HIGH->value][Gamut::DISPLAY_P3->value]}";
+                $css_property: "{$color_values[Theme::LIGHT->value][Contrast::HIGH->value][Gamut::REC2020->value]}";
+            }	
 
-			@media (prefers-color-scheme: dark) {
-				$css_property: "{$color_values[Theme::DARK->value][Contrast::DEFAULT->value][Gamut::SRGB->value]}";
-				$css_property: "{$color_values[Theme::DARK->value][Contrast::DEFAULT->value][Gamut::DISPLAY_P3->value]}";
-				$css_property: "{$color_values[Theme::DARK->value][Contrast::DEFAULT->value][Gamut::REC2020->value]}";
+            @media (prefers-color-scheme: dark) {
+                $css_property: "{$color_values[Theme::DARK->value][Contrast::DEFAULT->value][Gamut::SRGB->value]}";
+                $css_property: "{$color_values[Theme::DARK->value][Contrast::DEFAULT->value][Gamut::DISPLAY_P3->value]}";
+                $css_property: "{$color_values[Theme::DARK->value][Contrast::DEFAULT->value][Gamut::REC2020->value]}";
 
-				@media (prefers-contrast: more) {
-					$css_property: "{$color_values[Theme::DARK->value][Contrast::HIGH->value][Gamut::SRGB->value]}";
-					$css_property: "{$color_values[Theme::DARK->value][Contrast::HIGH->value][Gamut::DISPLAY_P3->value]}";
-					$css_property: "{$color_values[Theme::DARK->value][Contrast::HIGH->value][Gamut::REC2020->value]}";
-				}
-			}
-		}
-		CSS;
+                @media (prefers-contrast: more) {
+                    $css_property: "{$color_values[Theme::DARK->value][Contrast::HIGH->value][Gamut::SRGB->value]}";
+                    $css_property: "{$color_values[Theme::DARK->value][Contrast::HIGH->value][Gamut::DISPLAY_P3->value]}";
+                    $css_property: "{$color_values[Theme::DARK->value][Contrast::HIGH->value][Gamut::REC2020->value]}";
+                }
+            }
+        }
+        CSS;
 
         // Register to the bundle
         $this->registerClass(class: $class, component_id: $component_id);
@@ -357,7 +357,7 @@ abstract class Component
         }
 
         if ($template === false) {
-            throw new FileDoesNotExistException($this->getName() . ": mustache template file doesn't exists at " . static::getTemplatePath());
+            throw new FileDoesNotExists($this->getName() . ": mustache template file doesn't exists at " . static::getTemplatePath());
         }
 
         $mustache = new Engine(["entity_flags" => ENT_QUOTES]);

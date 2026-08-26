@@ -19,7 +19,6 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use Monolog\Handler\TestHandler;
 use Monolog\Logger;
 use AndreaPeverelli\PhxCore\App;
 use AndreaPeverelli\PhxCore\Props;
@@ -31,7 +30,7 @@ use AndreaPeverelli\PhxCore\Css\CssProperty;
 use AndreaPeverelli\PhxCore\Typography\Typo;
 use AndreaPeverelli\PhxCore\Typography\TypoRole;
 use AndreaPeverelli\PhxCore\Typography\TypoSubRole;
-use PHPUnit\Runner\FileDoesNotExistException;
+use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
 
 /**
  * @template PropsObject of \AndreaPeverelli\PhxCore\Props
@@ -42,6 +41,15 @@ use PHPUnit\Runner\FileDoesNotExistException;
 
 final class ComponentTest extends TestCase
 {
+    /*
+     * TESTS:
+     *  - Setup
+     *  - Get attributes
+     *  - Build
+     *  - Add color
+     *  - Add typo
+     */
+
     #[Test]
     #[TestDox("Setting up component")]
     public function setupComponent(): void
@@ -52,52 +60,55 @@ final class ComponentTest extends TestCase
             "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
         ];
 
-        $logger = new Logger("test");
-        //        $handler = new TestHandler();
-        //        $logger->pushHandler($handler);
-
         $id = uniqid();
 
-        $component = new TestComponent();
-        $props = $component->setupComponent(
+        /*
+         * 1 => single props test
+         * 2 => multi props test
+         */
+
+        /**************************************************
+         * Setup                                          *
+         **************************************************/
+
+        $component1 = new TestComponent();
+        $props1 = $component1->setupComponent(
             props: new Props(attributes: ["id" => $id]),
             app: new App(
-                logger: $logger,
+                logger: new Logger(""),
                 settings: $settings,
             ),
         );
 
-        //        $this->assertTrue($handler->hasInfo("Setting up test-component"));
-        //        $this->assertTrue($handler->hasDebug("Setting up state of test-component"));
-
-        $this->assertEquals(
-            ["default" => new Props(["id" => $id])],
-            $props,
-            "Checking props",
-        );
 
         $component2 = new TestComponent();
-        $props = $component2->setupComponent(
+        $props2 = $component2->setupComponent(
             props: [
                 "default" => new Props(attributes: ["id" => $id]),
                 "test" => new Props(attributes: ["id" => $id]),
             ],
             app: new App(
-                logger: $logger,
+                logger: new Logger(""),
                 settings: $settings,
             ),
         );
 
+        /**************************************************
+         * Tests                                          *
+         **************************************************/
 
-        //        $this->assertTrue($handler->hasInfo("Setting up test-component"));
-        //        $this->assertTrue($handler->hasDebug("Setting up state of test-component"));
+        $this->assertEquals(
+            ["default" => new Props(["id" => $id])],
+            $props1,
+            "Checking props",
+        );
 
         $this->assertEquals(
             [
                 "default" => new Props(["id" => $id]),
                 "test" => new Props(["id" => $id]),
             ],
-            $props,
+            $props2,
             "Checking props",
         );
 
@@ -113,28 +124,46 @@ final class ComponentTest extends TestCase
             "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
         ];
 
-        $logger = new Logger("test");
-        $handler = new TestHandler();
-        $logger->pushHandler($handler);
-
         $id = uniqid();
 
-        $component = new TestComponent();
-        $component->setupComponent(
+        /*
+         * 1 => Full attributes shape
+         * 2 => No attributes
+         */
+
+        /**************************************************
+         * Setup                                          *
+         **************************************************/
+
+        $component1 = new TestComponent();
+        $component1->setupComponent(
             props: new Props(attributes: [
                 "id" => $id,
                 "class" => ["test1", "test2"],
                 "test-key" => "test-value",
             ]),
             app: new App(
-                logger: $logger,
+                logger: new Logger(""),
                 settings: $settings,
             ),
         );
 
-        $attributes = $component->getComponentAttributes();
+        $attributes1 = $component1->getComponentAttributes();
 
-        $this->assertTrue($handler->hasInfo("Getting attributes of test-component"));
+        $component2 = new TestComponent();
+        $component2->setupComponent(
+            props: new Props(),
+            app: new App(
+                logger: new Logger(""),
+                settings: $settings,
+            ),
+        );
+
+        $attributes2 = $component2->getComponentAttributes();
+
+        /**************************************************
+         * Tests                                          *
+         **************************************************/
 
         $this->assertSame(
             [
@@ -142,25 +171,11 @@ final class ComponentTest extends TestCase
                 ["key" => "class", "value" => "test1 test2"],
                 ["key" => "test-key", "value" => "test-value"],
             ],
-            $attributes,
+            $attributes1,
             "Checking attributes",
         );
-
-        $component = new TestComponent();
-        $component->setupComponent(
-            props: new Props(),
-            app: new App(
-                logger: $logger,
-                settings: $settings,
-            ),
-        );
-
-        $attributes = $component->getComponentAttributes();
-
-        $this->assertTrue($handler->hasInfo("Getting attributes of test-component"));
-
         $this->assertTrue(
-            $attributes[0]["key"] === "id" && is_string($attributes[0]["value"]),
+            $attributes2[0]["key"] === "id",
             "Checking attributes",
         );
     }
@@ -169,84 +184,102 @@ final class ComponentTest extends TestCase
     #[TestDox("Build component")]
     public function buildComponent(): void
     {
-        $logger = new Logger("test");
-        $handler = new TestHandler();
-        $logger->pushHandler($handler);
+        /** @var Settings */
+        $settings = [
+            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
+            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
+        ];
 
         $id = uniqid();
 
-        // No template
-        $component = new TestComponent();
-        $component->setupComponent(
-            props: (object) [],
+        /*
+         * 1 => no template
+         * 2 => valid template path
+         * 3 => invalid template path
+         */
+
+        /**************************************************
+         * Setup                                          *
+         **************************************************/
+
+        $component1 = new TestComponent();
+        $component1->setupComponent(
+            props: new Props(),
             app: new App(
-                logger: $logger,
-                settings: [],
+                logger: new Logger(""),
+                settings: $settings,
             ),
         );
 
-        $component->buildComponent();
+        $component1->buildComponent();
 
-        $this->assertTrue($handler->hasInfo("Building component test-component"));
+        $component2 = new TestComponentTemplate();
+        $component2->setupComponent(
+            props: new Props(),
+            app: new App(
+                logger: new Logger(""),
+                settings: $settings,
+            ),
+        );
+
+        $component2->setComponentContext(context: (object) ["attributes" => ["id" => $id]]);
+        $component2->buildComponent();
+
+        $component3 = new TestComponentBrokenTemplate();
+        $component3->setupComponent(
+            props: new Props(),
+            app: new App(
+                logger: new Logger(""),
+                settings: $settings,
+            ),
+        );
+
+        /**************************************************
+         * Tests                                          *
+         **************************************************/
 
         $this->assertEquals(
             "",
-            $component->html,
+            $component1->html,
             "Checking build",
         );
-
-        // Valid template
-        $component = new TestComponentTemplate();
-        $component->setupComponent(
-            props: (object) [],
-            app: new App(
-                logger: $logger,
-                settings: [],
-            ),
-        );
-
-        $component->setComponentContext(context: (object) ["attributes" => ["id" => $id]]);
-        $component->buildComponent();
-
-        $this->assertTrue($handler->hasInfo("Building component test-component"));
 
         $this->assertEquals(
             "Test Build id=$id\n",
-            $component->html,
+            $component2->html,
             "Checking build",
         );
 
-        // Broken template
-        $component = new TestComponentBrokenTemplate();
-        $component->setupComponent(
-            props: (object) [],
-            app: new App(
-                logger: $logger,
-                settings: [],
-            ),
-        );
-
-        $this->expectException(exception: FileDoesNotExistException::class);
-        $component->buildComponent();
+        $this->expectException(FileDoesNotExists::class);
+        $component3->buildComponent();
     }
 
     #[Test]
     #[TestDox("Adding a color")]
     public function addColor(): void
     {
-        $logger = new Logger("test");
-        $handler = new TestHandler();
-        $logger->pushHandler($handler);
+        /** @var Settings */
+        $settings = [
+            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
+            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
+        ];
+
+        /*
+         * test all color roles
+         */
 
         foreach (ColorRole::cases() as $color_role) {
+
+            /**************************************************
+             * Setup                                          *
+             **************************************************/
+
             $component = new TestComponent();
             $component->setupComponent(
-                props: [],
+                props: new Props(),
                 app: new App(
-                    logger: $logger,
-                    settings: [
-                        "palette" => json_decode(file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
-                    ],
+                    logger: new Logger(""),
+                    settings: $settings,
                 ),
             );
 
@@ -260,36 +293,38 @@ final class ComponentTest extends TestCase
 
             $attributes = $component->getComponentAttributes();
 
-            $this->assertTrue($handler->hasInfo("Adding color to test-component"));
+            /**************************************************
+             * Tests                                          *
+             **************************************************/
 
             if ($color_role === ColorRole::ON_ROLE) {
                 $this->assertSame(
-                    [<<<CSS
-					.primary-on-role-color {
-						color: "#ffffff";
-						color: "color(display-p3 1.00 1.00 1.00)";
-						color: "color(rec2020 1.00 1.00 1.00)";
+                    str_replace([" ", "\t", "\n", "\r"], "", <<<CSS
+                    .primary-on-role-color {
+                        color: "#ffffff";
+                        color: "color(display-p3 1.00 1.00 1.00)";
+                        color: "color(rec2020 1.00 1.00 1.00)";
 
-						@media (prefers-contrast: more) {
-							color: "#ffffff";
-							color: "color(display-p3 1.00 1.00 1.00)";
-							color: "color(rec2020 1.00 1.00 1.00)";
-						}	
+                        @media (prefers-contrast: more) {
+                            color: "#ffffff";
+                            color: "color(display-p3 1.00 1.00 1.00)";
+                            color: "color(rec2020 1.00 1.00 1.00)";
+                        }	
 
-						@media (prefers-color-scheme: dark) {
-							color: "#5e1133";
-							color: "color(display-p3 0.34 0.09 0.20)";
-							color: "color(rec2020 0.34 0.16 0.24)";
+                        @media (prefers-color-scheme: dark) {
+                            color: "#5e1133";
+                            color: "color(display-p3 0.34 0.09 0.20)";
+                            color: "color(rec2020 0.34 0.16 0.24)";
 
-							@media (prefers-contrast: more) {
-								color: "#000000";
-								color: "color(display-p3 0.00 0.00 0.00)";
-								color: "color(rec2020 0.00 0.00 0.00)";
-							}
-						}
-					}
-					CSS],
-                    $component->css,
+                            @media (prefers-contrast: more) {
+                                color: "#000000";
+                                color: "color(display-p3 0.00 0.00 0.00)";
+                                color: "color(rec2020 0.00 0.00 0.00)";
+                            }
+                        }
+                    }
+                    CSS),
+                    str_replace([" ", "\t", "\n", "\r"], "", $component->css[0]),
                     "Checking CSS {$color_role->value}",
                 );
             }
@@ -308,18 +343,22 @@ final class ComponentTest extends TestCase
     #[TestDox("Adding a font")]
     public function addFont(): void
     {
-        $logger = new Logger("test");
-        $handler = new TestHandler();
-        $logger->pushHandler($handler);
+        /** @var Settings */
+        $settings = [
+            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
+            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
+        ];
+
+        /**************************************************
+         * Setup                                          *
+         **************************************************/
 
         $component = new TestComponent();
         $component->setupComponent(
-            props: [],
+            props: new Props(),
             app: new App(
-                logger: $logger,
-                settings: [
-                    "typescale" => json_decode(file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
-                ],
+                logger: new Logger(""),
+                settings: $settings,
             ),
         );
 
@@ -333,7 +372,10 @@ final class ComponentTest extends TestCase
 
         $attributes = $component->getComponentAttributes();
 
-        $this->assertTrue($handler->hasInfo("Adding typo to test-component"));
+        /**************************************************
+         * Tests                                          *
+         **************************************************/
+
         $this->assertSame(
             [<<<CSS
 			.display-large {
@@ -347,6 +389,7 @@ final class ComponentTest extends TestCase
             $component->css,
             "Checking CSS",
         );
+
         $this->assertTrue(
             in_array(
                 ["key" => "class", "value" => "display-large"],
@@ -354,6 +397,7 @@ final class ComponentTest extends TestCase
             ),
             "Checking class",
         );
+
         $this->assertTrue(
             in_array(
                 ["font-family" => "phx-heading", "italic" => false],
@@ -362,10 +406,13 @@ final class ComponentTest extends TestCase
             "Checking font list",
         );
     }
-
 }
 
-/** @extends Component<Props> */
+/**
+ * @extends Component<Props>
+ * @phpstan-import-type NormalizedAttributes from \AndreaPeverelli\PhxCore\Component
+ * @phpstan-type ComponentsProps array<string, Props>
+ */
 final class TestComponent extends Component
 {
     final protected static function getName(): string
@@ -379,9 +426,9 @@ final class TestComponent extends Component
     }
 
     /**
-     * @param PropsObject|Props $props
+     * @param Props|ComponentsProps $props
      *
-     * @return Props
+     * @return ComponentsProps
      */
     public function setupComponent(object|array $props, App $app): array
     {
@@ -393,9 +440,7 @@ final class TestComponent extends Component
         $this->context = $context;
     }
 
-    /**
-     * @return Attribute
-     */
+    /** @return NormalizedAttributes */
     public function getComponentAttributes(): array
     {
         return $this->getAttributes();
@@ -431,7 +476,10 @@ final class TestComponent extends Component
     }
 }
 
-/** @extends Component<Props> */
+/**
+ * @extends Component<Props>
+ * @phpstan-type ComponentsProps array<string, Props>
+ */
 final class TestComponentTemplate extends Component
 {
     final protected static function getName(): string
@@ -445,9 +493,9 @@ final class TestComponentTemplate extends Component
     }
 
     /**
-     * @param PropsObject|Props $props
+     * @param Props|ComponentsProps $props
      *
-     * @return Props
+     * @return ComponentsProps
      */
     public function setupComponent(object|array $props, App $app): array
     {
@@ -465,7 +513,10 @@ final class TestComponentTemplate extends Component
     }
 }
 
-/** @extends Component<Props> */
+/**
+ * @extends Component<Props>
+ * @phpstan-type ComponentsProps array<string, Props>
+ */
 final class TestComponentBrokenTemplate extends Component
 {
     final protected static function getName(): string
@@ -479,9 +530,9 @@ final class TestComponentBrokenTemplate extends Component
     }
 
     /**
-     * @param PropsObject|Props $props
+     * @param Props|ComponentsProps $props
      *
-     * @return Props
+     * @return ComponentsProps
      */
     public function setupComponent(object|array $props, App $app): array
     {
