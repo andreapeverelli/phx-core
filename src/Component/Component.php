@@ -34,7 +34,7 @@ use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
  * @phpstan-type NormalizedAttributes array<int, array{key: string, value: string}>
  * @phpstan-type ComponentsAttributes array<string, NormalizedAttributes>
  *
- * @phpstan-import-type Settings from \AndreaPeverelli\PhxCore\App
+ * @phpstan-import-type Settings from Setting
  */
 abstract class Component
 {

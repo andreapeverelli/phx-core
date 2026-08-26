@@ -23,6 +23,7 @@ use Monolog\Logger;
 use AndreaPeverelli\PhxCore\App;
 use AndreaPeverelli\PhxCore\Props;
 use AndreaPeverelli\PhxCore\Component;
+use AndreaPeverelli\PhxCore\Settings\Setting;
 use AndreaPeverelli\PhxCore\Palette\Color;
 use AndreaPeverelli\PhxCore\Palette\BaseColor;
 use AndreaPeverelli\PhxCore\Palette\ColorRole;
@@ -32,12 +33,7 @@ use AndreaPeverelli\PhxCore\Typography\TypoRole;
 use AndreaPeverelli\PhxCore\Typography\TypoSubRole;
 use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
 
-/**
- * @template PropsObject of \AndreaPeverelli\PhxCore\Props
- * @phpstan-import-type ComponentsProps from \AndreaPeverelli\PhxCore\Component
- * @phpstan-import-type NormalizedAttributes from \AndreaPeverelli\PhxCore\Component
- * @phpstan-import-type Settings from \AndreaPeverelli\PhxCore\App
- */
+/** @phpstan-import-type Settings from Setting */
 
 final class ComponentTest extends TestCase
 {
@@ -54,10 +50,9 @@ final class ComponentTest extends TestCase
     #[TestDox("Setting up component")]
     public function setupComponent(): void
     {
-        /** @var Settings */
         $settings = [
-            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
-            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
+            "palette" => Setting::PALETTE->load(),
+            "typescale" =>  Setting::TYPESCALE->load(),
         ];
 
         $id = uniqid();

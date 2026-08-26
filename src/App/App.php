@@ -18,38 +18,7 @@ namespace AndreaPeverelli\PhxCore;
 
 use Psr\Log\LoggerInterface;
 
-/**
- * @phpstan-type PaletteSettings array<
- *		value-of<\AndreaPeverelli\PhxCore\Palette\BaseColor>,
- *		array<
- *			value-of<\AndreaPeverelli\PhxCore\Palette\Tone>,
- *			array{
- *				srgb: string,
- *				display-p3: array{r: float, g: float, b: float},
- *				rec2020: array{r: float, g: float, b: float},
- *			}
- *		>
- * >
- * @phpstan-type TypescaleSettings array<
- *		value-of<\AndreaPeverelli\PhxCore\Typography\TypoRole>,
- *		array<
- *			value-of<\AndreaPeverelli\PhxCore\Typography\TypoSubRole>,
- *			array{
- *				font-size: float,
- *				font-weight: array<
- *					value-of<\AndreaPeverelli\PhxCore\Typography\Emphasized>,
- *					int
- *				>,
- *				line-height: float,
- *				letter-spacing: float,
- *			}
- *		>
- * >
- * @phpstan-type Settings array{
- *		palette: PaletteSettings,
- *		typescale: TypescaleSettings,
- * }
- */
+/** @phpstan-import-type Settings from \AndreaPeverelli\PhxCore\Settings\Setting */
 final readonly class App
 {
     public function __construct(
