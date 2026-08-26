@@ -299,7 +299,7 @@ final class ComponentTest extends TestCase
 
             if ($color_role === ColorRole::ON_ROLE) {
                 $this->assertSame(
-                    str_replace([" ", "\t", "\n", "\r"], "", <<<CSS
+                    <<<CSS
                     .primary-on-role-color {
                         color: "#ffffff";
                         color: "color(display-p3 1.00 1.00 1.00)";
@@ -323,8 +323,8 @@ final class ComponentTest extends TestCase
                             }
                         }
                     }
-                    CSS),
-                    str_replace([" ", "\t", "\n", "\r"], "", $component->css[0]),
+                    CSS,
+                    $component->css[0],
                     "Checking CSS {$color_role->value}",
                 );
             }
@@ -377,16 +377,16 @@ final class ComponentTest extends TestCase
          **************************************************/
 
         $this->assertSame(
-            [<<<CSS
-			.display-large {
-				font-family: "phx-heading";
-				font-size: "57";
-				font-weight: "400";
-				line-height: "64";
-				letter-spacing: "0";
-			}
-			CSS],
-            $component->css,
+            <<<CSS
+            .display-large {
+                font-family: "phx-heading";
+                font-size: "57";
+                font-weight: "400";
+                line-height: "64";
+                letter-spacing: "0";
+            }
+            CSS,
+            $component->css[0],
             "Checking CSS",
         );
 

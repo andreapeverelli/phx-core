@@ -295,14 +295,14 @@ abstract class Component
         $typescale = $this->app->settings[Setting::TYPESCALE->value];
 
         $css = <<<CSS
-		.$class {
-			font-family: "$font_family";
-			font-size: "{$typescale[$role][$sub_role]["font-size"]}";
-			font-weight: "{$typescale[$role][$sub_role]["font-weight"][$emphasized]}";
-			line-height: "{$typescale[$role][$sub_role]["line-height"]}";
-			letter-spacing: "{$typescale[$role][$sub_role]["letter-spacing"]}";
-		}
-		CSS;
+        .$class {
+            font-family: "$font_family";
+            font-size: "{$typescale[$role][$sub_role]["font-size"]}";
+            font-weight: "{$typescale[$role][$sub_role]["font-weight"][$emphasized]}";
+            line-height: "{$typescale[$role][$sub_role]["line-height"]}";
+            letter-spacing: "{$typescale[$role][$sub_role]["letter-spacing"]}";
+        }
+        CSS;
 
         // Register to the bundle
         $this->registerClass(class: $class, component_id: $component_id);
