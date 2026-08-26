@@ -78,4 +78,14 @@ enum Setting: string
         return $settings;
         // }
     }
+
+
+    /** @return Settings */
+    final public static function loadAll(): array
+    {
+        return [
+            self::PALETTE->value => self::PALETTE->load(),
+            self::TYPESCALE->value => self::TYPESCALE->load(),
+        ];
+    }
 }

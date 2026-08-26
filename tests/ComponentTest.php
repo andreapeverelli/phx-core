@@ -50,13 +50,6 @@ final class ComponentTest extends TestCase
     #[TestDox("Setting up component")]
     public function setupComponent(): void
     {
-        $settings = [
-            "palette" => Setting::PALETTE->load(),
-            "typescale" =>  Setting::TYPESCALE->load(),
-        ];
-
-        $id = uniqid();
-
         /*
          * 1 => single props test
          * 2 => multi props test
@@ -66,12 +59,14 @@ final class ComponentTest extends TestCase
          * Setup                                          *
          **************************************************/
 
+        $id = uniqid();
+
         $component1 = new TestComponent();
         $props1 = $component1->setupComponent(
             props: new Props(attributes: ["id" => $id]),
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
@@ -84,7 +79,7 @@ final class ComponentTest extends TestCase
             ],
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
@@ -113,14 +108,6 @@ final class ComponentTest extends TestCase
     #[TestDox("Getting component attributes")]
     public function getComponentAttributes(): void
     {
-        /** @var Settings */
-        $settings = [
-            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
-            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
-        ];
-
-        $id = uniqid();
-
         /*
          * 1 => Full attributes shape
          * 2 => No attributes
@@ -129,6 +116,8 @@ final class ComponentTest extends TestCase
         /**************************************************
          * Setup                                          *
          **************************************************/
+
+        $id = uniqid();
 
         $component1 = new TestComponent();
         $component1->setupComponent(
@@ -139,7 +128,7 @@ final class ComponentTest extends TestCase
             ]),
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
@@ -150,7 +139,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
@@ -179,14 +168,6 @@ final class ComponentTest extends TestCase
     #[TestDox("Build component")]
     public function buildComponent(): void
     {
-        /** @var Settings */
-        $settings = [
-            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
-            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
-        ];
-
-        $id = uniqid();
-
         /*
          * 1 => no template
          * 2 => valid template path
@@ -197,12 +178,14 @@ final class ComponentTest extends TestCase
          * Setup                                          *
          **************************************************/
 
+        $id = uniqid();
+
         $component1 = new TestComponent();
         $component1->setupComponent(
             props: new Props(),
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
@@ -213,7 +196,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
@@ -225,7 +208,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
@@ -253,12 +236,6 @@ final class ComponentTest extends TestCase
     #[TestDox("Adding a color")]
     public function addColor(): void
     {
-        /** @var Settings */
-        $settings = [
-            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
-            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
-        ];
-
         /*
          * test all color roles
          */
@@ -274,7 +251,7 @@ final class ComponentTest extends TestCase
                 props: new Props(),
                 app: new App(
                     logger: new Logger(""),
-                    settings: $settings,
+                    settings: Setting::loadAll(),
                 ),
             );
 
@@ -338,11 +315,6 @@ final class ComponentTest extends TestCase
     #[TestDox("Adding a font")]
     public function addFont(): void
     {
-        /** @var Settings */
-        $settings = [
-            "palette" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.palette.json"), true),
-            "typescale" => json_decode((string) file_get_contents(__DIR__ . "/../settings/default.typescale.json"), true),
-        ];
 
         /**************************************************
          * Setup                                          *
@@ -353,7 +325,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: new Logger(""),
-                settings: $settings,
+                settings: Setting::loadAll(),
             ),
         );
 
