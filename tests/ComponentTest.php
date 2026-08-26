@@ -33,8 +33,6 @@ use AndreaPeverelli\PhxCore\Typography\TypoRole;
 use AndreaPeverelli\PhxCore\Typography\TypoSubRole;
 use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
 
-/** @phpstan-import-type Settings from Setting */
-
 final class ComponentTest extends TestCase
 {
     /*
