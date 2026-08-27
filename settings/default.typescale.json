@@ -86,8 +86,8 @@
             "letter-spacing": 0
         }
     },
-    "main-font-name": "",
-    "main-italic": "",
+    "main-font-name": "google-sans",
+    "main-italic": "\/home\/andrea\/projects\/phx\/phx-showcase\/source_assets\/fonts\/google-sans\/google-sans-italic.ttf",
     "body": {
         "large": {
             "font-size": 16,
@@ -146,6 +146,6 @@
             "letter-spacing": 0.10575807248081927
         }
     },
-    "support-font-name": "",
-    "support-italic": ""
+    "support-font-name": "roboto",
+    "support-italic": "\/home\/andrea\/projects\/phx\/phx-showcase\/source_assets\/fonts\/roboto\/roboto-italic.ttf"
 }
