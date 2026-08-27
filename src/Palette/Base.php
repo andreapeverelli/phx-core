@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace AndreaPeverelli\PhxCore\Palette;
 
-enum BaseColor: string
+enum Base: string
 {
     // standard
     case NEUTRAL = "neutral";

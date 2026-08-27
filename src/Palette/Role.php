@@ -26,7 +26,7 @@ namespace AndreaPeverelli\PhxCore\Palette;
  * >
  */
 
-enum ColorRole: string
+enum Role: string
 {
     // standard
     case ROLE = "role";

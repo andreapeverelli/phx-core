@@ -18,7 +18,7 @@ namespace AndreaPeverelli\PhxCore;
 
 use Psr\Log\LoggerInterface;
 
-/** @phpstan-import-type Settings from \AndreaPeverelli\PhxCore\Settings\Setting */
+/** @phpstan-import-type Settings from \AndreaPeverelli\PhxCore\Setting */
 final readonly class App
 {
     public function __construct(

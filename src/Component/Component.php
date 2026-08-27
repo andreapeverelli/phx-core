@@ -18,13 +18,13 @@ namespace AndreaPeverelli\PhxCore;
 
 use Mustache\Engine;
 use AndreaPeverelli\PhxCore\App;
-use AndreaPeverelli\PhxCore\Palette\Color;
+use AndreaPeverelli\PhxCore\Color;
 use AndreaPeverelli\PhxCore\Palette\Theme;
 use AndreaPeverelli\PhxCore\Palette\Contrast;
 use AndreaPeverelli\PhxCore\Palette\Gamut;
-use AndreaPeverelli\PhxCore\Typography\Typo;
+use AndreaPeverelli\PhxCore\Typo;
 use AndreaPeverelli\PhxCore\Css\CssProperty;
-use AndreaPeverelli\PhxCore\Settings\Setting;
+use AndreaPeverelli\PhxCore\Setting;
 use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
 
 /**

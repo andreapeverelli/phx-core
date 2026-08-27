@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace AndreaPeverelli\PhxCore\Typography;
 
-enum TypoRole: string
+enum Role: string
 {
     case DISPLAY = "display";
     case HEADLINE = "headline";

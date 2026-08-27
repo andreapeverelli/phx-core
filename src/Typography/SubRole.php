@@ -16,7 +16,7 @@ declare(strict_types=1);
 
 namespace AndreaPeverelli\PhxCore\Typography;
 
-enum TypoSubRole: string
+enum SubRole: string
 {
     case LARGE = "large";
     case MEDIUM = "medium";

@@ -14,7 +14,7 @@
 
 declare(strict_types=1);
 
-namespace AndreaPeverelli\PhxCore\Settings;
+namespace AndreaPeverelli\PhxCore;
 
 /**
  * @phpstan-type PaletteSettings array<

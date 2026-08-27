@@ -19,18 +19,18 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestDox;
-use Monolog\Logger;
 use AndreaPeverelli\PhxCore\App;
 use AndreaPeverelli\PhxCore\Props;
 use AndreaPeverelli\PhxCore\Component;
-use AndreaPeverelli\PhxCore\Settings\Setting;
-use AndreaPeverelli\PhxCore\Palette\Color;
-use AndreaPeverelli\PhxCore\Palette\BaseColor;
-use AndreaPeverelli\PhxCore\Palette\ColorRole;
+use AndreaPeverelli\PhxCore\Logger;
+use AndreaPeverelli\PhxCore\Setting;
+use AndreaPeverelli\PhxCore\Color;
+use AndreaPeverelli\PhxCore\Palette\Base;
+use AndreaPeverelli\PhxCore\Palette\Role as ColorRole;
 use AndreaPeverelli\PhxCore\Css\CssProperty;
-use AndreaPeverelli\PhxCore\Typography\Typo;
-use AndreaPeverelli\PhxCore\Typography\TypoRole;
-use AndreaPeverelli\PhxCore\Typography\TypoSubRole;
+use AndreaPeverelli\PhxCore\Typo;
+use AndreaPeverelli\PhxCore\Typography\Role as TypoRole;
+use AndreaPeverelli\PhxCore\Typography\SubRole;
 use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
 
 final class ComponentTest extends TestCase
@@ -63,7 +63,7 @@ final class ComponentTest extends TestCase
         $props1 = $component1->setupComponent(
             props: new Props(attributes: ["id" => $id]),
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -76,7 +76,7 @@ final class ComponentTest extends TestCase
                 "test" => new Props(attributes: ["id" => $id]),
             ],
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -125,7 +125,7 @@ final class ComponentTest extends TestCase
                 "test-key" => "test-value",
             ]),
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -136,7 +136,7 @@ final class ComponentTest extends TestCase
         $component2->setupComponent(
             props: new Props(),
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -182,7 +182,7 @@ final class ComponentTest extends TestCase
         $component1->setupComponent(
             props: new Props(),
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -193,7 +193,7 @@ final class ComponentTest extends TestCase
         $component2->setupComponent(
             props: new Props(),
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -205,7 +205,7 @@ final class ComponentTest extends TestCase
         $component3->setupComponent(
             props: new Props(),
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -248,16 +248,18 @@ final class ComponentTest extends TestCase
             $component->setupComponent(
                 props: new Props(),
                 app: new App(
-                    logger: new Logger(""),
+                    logger: Logger::create(),
                     settings: Setting::loadAll(),
                 ),
             );
 
+            $color = new Color(
+                base: Base::PRIMARY,
+                role: $color_role,
+            );
+
             $component->addComponentColor(
-                color: new Color(
-                    base: BaseColor::PRIMARY,
-                    role: $color_role,
-                ),
+                color: $color,
                 css_property: CssProperty::COLOR,
             );
 
@@ -301,7 +303,7 @@ final class ComponentTest extends TestCase
 
             $this->assertTrue(
                 in_array(
-                    ["key" => "class", "value" => "primary-{$color_role->value}-color"],
+                    ["key" => "class", "value" => "{$color->base->value}-{$color->role->value}-color"],
                     $attributes,
                 ),
                 "Checking class {$color_role->value}",
@@ -322,7 +324,7 @@ final class ComponentTest extends TestCase
         $component->setupComponent(
             props: new Props(),
             app: new App(
-                logger: new Logger(""),
+                logger: Logger::create(),
                 settings: Setting::loadAll(),
             ),
         );
@@ -330,7 +332,7 @@ final class ComponentTest extends TestCase
         $component->addComponentTypo(
             typo: new Typo(
                 role: TypoRole::DISPLAY,
-                sub_role: TypoSubRole::LARGE,
+                sub_role: SubRole::LARGE,
             ),
             content: "",
         );

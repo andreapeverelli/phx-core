@@ -14,13 +14,17 @@
 
 declare(strict_types=1);
 
-namespace AndreaPeverelli\PhxCore\Typography;
+namespace AndreaPeverelli\PhxCore;
+
+use AndreaPeverelli\PhxCore\Typography\Role;
+use AndreaPeverelli\PhxCore\Typography\SubRole;
+use AndreaPeverelli\PhxCore\Typography\Emphasized;
 
 final readonly class Typo
 {
     public function __construct(
-        public private(set) TypoRole $role,
-        public private(set) TypoSubRole $sub_role,
+        public private(set) Role $role,
+        public private(set) SubRole $sub_role,
         public private(set) Emphasized $emphasized = Emphasized::REGULAR,
     ) {}
 
