@@ -1,0 +1,17 @@
+{
+    "app-name": "phx-core",
+    "app-short-name": "phx-core",
+    "vendor": "andreapeverelli",
+    "description": "PHX framework.",
+    "version": "0.0.1",
+    "license": "GPL-3.0",
+    "domain": "andreapeverelli.com\/phx",
+    "homepage": "andreapeverelli.com\/phx",
+    "languages": "en,it",
+    "categories": "utilities",
+    "name-surname": "Andrea Peverelli",
+    "email": "ndrpeverelli@gmail.com",
+    "personal-website": "andreapeverelli.com",
+    "x": "@ndrpvrll",
+    "github": "andreapeverelli"
+}

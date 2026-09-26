@@ -17,14 +17,10 @@ declare(strict_types=1);
 namespace AndreaPeverelli\PhxCore;
 
 use Mustache\Engine;
-use AndreaPeverelli\PhxCore\App;
-use AndreaPeverelli\PhxCore\Color;
 use AndreaPeverelli\PhxCore\Palette\Theme;
 use AndreaPeverelli\PhxCore\Palette\Contrast;
 use AndreaPeverelli\PhxCore\Palette\Gamut;
-use AndreaPeverelli\PhxCore\Typo;
 use AndreaPeverelli\PhxCore\Css\CssProperty;
-use AndreaPeverelli\PhxCore\Setting;
 use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
 
 /**
@@ -35,6 +31,8 @@ use AndreaPeverelli\PhxCore\Exception\FileDoesNotExists;
  * @phpstan-type ComponentsAttributes array<string, NormalizedAttributes>
  *
  * @phpstan-import-type Settings from Setting
+ *
+ * @phpstan-type Font array{font-family: string, italic: bool}
  */
 abstract class Component
 {
@@ -76,11 +74,17 @@ abstract class Component
      **************************************************/
 
     public private(set) string $html = "";
+
     /** @var array<int, string> $css */
     public private(set) array $css = [];
-    /** @var array<int, string> $js */
-    public private(set) array $js = [];
-    /** @var array<int, array{font-family: string, italic: bool}> $fonts */
+
+    /** @var array<int, string> $js_before */
+    public private(set) array $js_before = [];
+
+    /** @var array<int, string> $js_after */
+    public private(set) array $js_after = [];
+
+    /** @var array<int, Font> $fonts */
     public private(set) array $fonts = [];
 
     /**************************************************
@@ -211,7 +215,7 @@ abstract class Component
                     $gamut = $_gamut->value;
 
                     $value
-                        = $this->app->settings[Setting::PALETTE->value][$color->base->value][$palette[$theme][$contrast]->value][$gamut];
+                        = $this->app->settings[SettingFile::PALETTE->value][$color->base->value][$palette[$theme][$contrast]->value][$gamut];
                     if (
                         $gamut === Gamut::REC2020->value
                         || $gamut === Gamut::DISPLAY_P3->value
@@ -274,7 +278,7 @@ abstract class Component
      */
     final protected function addTypo(
         Typo $typo,
-        string $content,
+        string $content = "",
         string $component_id = "default",
     ): void {
         $this->app->logger->info("Adding typo to " . $this->getName(), [
@@ -292,7 +296,7 @@ abstract class Component
         $class = "{$role}-{$sub_role}";
         $font_family = $typo->role->getFontFamily();
 
-        $typescale = $this->app->settings[Setting::TYPESCALE->value];
+        $typescale = $this->app->settings[SettingFile::TYPESCALE->value];
 
         $css = <<<CSS
         .$class {

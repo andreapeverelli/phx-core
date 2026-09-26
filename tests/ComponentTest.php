@@ -64,7 +64,7 @@ final class ComponentTest extends TestCase
             props: new Props(attributes: ["id" => $id]),
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 
@@ -77,7 +77,7 @@ final class ComponentTest extends TestCase
             ],
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 
@@ -126,7 +126,7 @@ final class ComponentTest extends TestCase
             ]),
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 
@@ -137,7 +137,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 
@@ -183,7 +183,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 
@@ -194,7 +194,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 
@@ -206,7 +206,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 
@@ -249,7 +249,7 @@ final class ComponentTest extends TestCase
                 props: new Props(),
                 app: new App(
                     logger: Logger::create(),
-                    settings: Setting::loadAll(),
+                    settings: (new Setting())->settings,
                 ),
             );
 
@@ -325,7 +325,7 @@ final class ComponentTest extends TestCase
             props: new Props(),
             app: new App(
                 logger: Logger::create(),
-                settings: Setting::loadAll(),
+                settings: (new Setting())->settings,
             ),
         );
 

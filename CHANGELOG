@@ -7,10 +7,12 @@ and this project adheres to Semantic Versioning.
 
 ### Added
  - Logger
+ - Setting class
 
 ### Updated
  - Color, Typo and Setting are now under root namespace
  - Color's base is now optional
+ - Setting is now SettingFile with only the enum
 
 ## [0.2.9] 2026-08-27
 
